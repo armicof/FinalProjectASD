@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 /**
  * The main Sudoku program
@@ -17,8 +18,18 @@ public class Sudoku extends JFrame {
 
         cp.add(board, BorderLayout.CENTER);
 
-        // Add a button to the south to re-start the game via board.newGame()
-        // ......
+        // Add a button to the south to restart the game
+        JPanel controlPanel = new JPanel();
+        controlPanel.add(btnNewGame);
+        cp.add(controlPanel, BorderLayout.SOUTH);
+
+        // Add ActionListener for the "New Game" button
+        btnNewGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                board.newGame(); // Restart the game by generating a new puzzle
+            }
+        });
 
         // Initialize the game board to start the game
         board.newGame();
@@ -33,8 +44,8 @@ public class Sudoku extends JFrame {
     public static void play() {
         // [TODO 1] Check "Swing program template" on how to run
         //  the constructor of "SudokuMain"
-        // .........
-        new Sudoku();
+        SwingUtilities.invokeLater(() -> new Sudoku());
+
 
 
     }
