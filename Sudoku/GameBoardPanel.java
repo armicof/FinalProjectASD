@@ -20,41 +20,11 @@ public class GameBoardPanel extends JPanel {
     private Sudoku parentFrame;
 
     /** Constructor */
-    // public GameBoardPanel() {
-    //     super.setLayout(new GridLayout(SudokuConstants.GRID_SIZE, SudokuConstants.GRID_SIZE));  // JPanel
-
-    //     // Allocate the 2D array of Cell, and added into JPanel.
-    //     for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
-    //         for (int col = 0; col < SudokuConstants.GRID_SIZE; ++col) {
-    //             cells[row][col] = new Cell(row, col);
-    //             super.add(cells[row][col]);   // JPanel
-    //         }
-    //     }
-
-    //     // [TODO 3] Allocate a common listener as the ActionEvent listener for all the
-    //     //  Cells (JTextFields)
-    //     // .........
-    //     CellInputListener listener = new CellInputListener();
-
-    //     // [TODO 4] Adds this common listener to all editable cells
-    //     // .........
-    //     for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
-    //         for (int col = 0; col < SudokuConstants.GRID_SIZE; ++col) {
-    //             if (cells[row][col].isEditable()) {
-    //                 cells[row][col].addActionListener(listener);   // For all editable rows and cols
-    //             }
-    //         }
-    //     }
-
-    //     super.setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
-
-        
-    // }
-
     public GameBoardPanel(Sudoku parentFrame) {
         this.parentFrame = parentFrame;
         super.setLayout(new GridLayout(SudokuConstants.GRID_SIZE, SudokuConstants.GRID_SIZE));
 
+        // Allocate the 2D array of Cell, and added into JPanel.
         for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
             for (int col = 0; col < SudokuConstants.GRID_SIZE; ++col) {
                 cells[row][col] = new Cell(row, col);
@@ -62,7 +32,11 @@ public class GameBoardPanel extends JPanel {
             }
         }
 
+        // [TODO 3] Allocate a common listener as the ActionEvent listener for all the
+        //  Cells (JTextFields)
         CellInputListener listener = new CellInputListener();
+
+        // [TODO 4] Adds this common listener to all editable cells
         for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
             for (int col = 0; col < SudokuConstants.GRID_SIZE; ++col) {
                 if (cells[row][col].isEditable()) {
@@ -131,7 +105,8 @@ public class GameBoardPanel extends JPanel {
             int numberIn = Integer.parseInt(sourceCell.getText());
             // For debugging
             System.out.println("You entered " + numberIn);
-
+            //Highlight input
+            highlightNumber(numberIn);
             /*
              * [TODO 5] (later - after TODO 3 and 4)
              * Check the numberIn against sourceCell.number.
@@ -160,5 +135,16 @@ public class GameBoardPanel extends JPanel {
         }
     }
 
-
+    public void highlightNumber(int number) {
+        for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
+            for (int col = 0; col < SudokuConstants.GRID_SIZE; ++col) {
+                if (cells[row][col].number == number && cells[row][col].status == CellStatus.GIVEN) {
+                    cells[row][col].setBackground(Color.CYAN); // Highlight color
+                } else {
+                    // Reset background for non-highlighted cells
+                    cells[row][col].paint();
+                }
+            }
+        }
+    }
 }
