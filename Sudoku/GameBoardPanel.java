@@ -90,7 +90,8 @@ public class GameBoardPanel extends JPanel {
             int numberIn = Integer.parseInt(sourceCell.getText());
             // For debugging
             System.out.println("You entered " + numberIn);
-
+            //Highlight input
+            highlightNumber(numberIn);
             /*
              * [TODO 5] (later - after TODO 3 and 4)
              * Check the numberIn against sourceCell.number.
@@ -111,6 +112,19 @@ public class GameBoardPanel extends JPanel {
              */
             if(isSolved()){
                 JOptionPane.showMessageDialog(null, "Congratulation!");
+            }
+        }
+    }
+
+    public void highlightNumber(int number) {
+        for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
+            for (int col = 0; col < SudokuConstants.GRID_SIZE; ++col) {
+                if (cells[row][col].number == number && cells[row][col].status == CellStatus.GIVEN) {
+                    cells[row][col].setBackground(Color.CYAN); // Highlight color
+                } else {
+                    // Reset background for non-highlighted cells
+                    cells[row][col].paint();
+                }
             }
         }
     }
