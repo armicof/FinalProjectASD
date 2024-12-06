@@ -18,6 +18,7 @@ public class GameBoardPanel extends JPanel {
     private Puzzle puzzle = new Puzzle();
     private int remainingCells;
     private Sudoku parentFrame;
+    private int score = 0;
 
     /** Constructor */
     public GameBoardPanel(Sudoku parentFrame) {
@@ -117,6 +118,7 @@ public class GameBoardPanel extends JPanel {
             if (numberIn == sourceCell.number) {
                 sourceCell.status = CellStatus.CORRECT_GUESS;
                 sourceCell.setText(String.valueOf(numberIn));
+                score += 10;
                 GameBoardPanel.this.getRemainingCells();
             } else {
                 sourceCell.status = CellStatus.WRONG_GUESS;
