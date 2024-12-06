@@ -107,6 +107,7 @@ public class GameBoardPanel extends JPanel {
             System.out.println("You entered " + numberIn);
             //Highlight input
             highlightNumber(numberIn);
+
             /*
              * [TODO 5] (later - after TODO 3 and 4)
              * Check the numberIn against sourceCell.number.
@@ -115,6 +116,7 @@ public class GameBoardPanel extends JPanel {
              */
             if (numberIn == sourceCell.number) {
                 sourceCell.status = CellStatus.CORRECT_GUESS;
+                sourceCell.setText(String.valueOf(numberIn));
                 GameBoardPanel.this.getRemainingCells();
             } else {
                 sourceCell.status = CellStatus.WRONG_GUESS;

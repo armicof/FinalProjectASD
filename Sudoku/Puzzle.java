@@ -36,7 +36,6 @@ public class Puzzle {
                 col = (int) (Math.random() * SudokuConstants.GRID_SIZE);
             } while (!isGiven[row][col]); // Cari cell yang belum kosong
             isGiven[row][col] = false;   // Hapus angka
-            numbers[row][col] = 0;   // Set angka menjadi 0 (kosong)
         }      
     }
 
@@ -62,7 +61,8 @@ public class Puzzle {
                 numbers[row][col] = hardcodedNumbers[row][col];
             }
         }
-        
+
+
         // Clear cells based on difficulty level
         int clues;
         switch (level) {
