@@ -14,10 +14,35 @@ public class Puzzle {
         super();
     }
 
+    public enum Difficulty {
+        EASY, MEDIUM, HARD
+    }
+
+    /**
+     * Clear cells to create the puzzle by removing certain numbers.
+     */
+    private void clearCells(int cellsToClear) {
+        for (int i = 0; i < SudokuConstants.GRID_SIZE; i++) {
+            for (int j = 0; j < SudokuConstants.GRID_SIZE; j++) {
+                isGiven[i][j] = true; // Awalnya semua angka diberikan
+            }
+        }
+
+        // Randomly remove numbers
+        for (int i = 0; i < cellsToClear; i++) {
+            int row, col;
+            do {
+                row = (int) (Math.random() * SudokuConstants.GRID_SIZE);
+                col = (int) (Math.random() * SudokuConstants.GRID_SIZE);
+            } while (!isGiven[row][col]); // Cari cell yang belum kosong
+            isGiven[row][col] = false;   // Hapus angka
+        }      
+    }
+
     // Generate a new puzzle given the number of cells to be guessed, which can be used
     //  to control the difficulty level.
     // This method shall set (or update) the arrays numbers and isGiven
-    public void newPuzzle(int cellsToGuess) {
+    public void newPuzzle(Difficulty level) {
         // I hardcode a puzzle here for illustration and testing.
         int[][] hardcodedNumbers =
                 {{5, 3, 4, 6, 7, 8, 9, 1, 2},
@@ -37,26 +62,23 @@ public class Puzzle {
             }
         }
 
-        // Need to use input parameter cellsToGuess!
-        // Hardcoded for testing, only 2 cells of "8" is NOT GIVEN
-        boolean[][] hardcodedIsGiven =
-                {{true, true, true, true, true, false, true, true, true},
-                        {true, true, true, true, true, true, true, true, false},
-                        {true, true, true, true, true, true, true, true, true},
-                        {true, true, true, true, true, true, true, true, true},
-                        {true, true, true, true, true, true, true, true, true},
-                        {true, true, true, true, true, true, true, true, true},
-                        {true, true, true, true, true, true, true, true, true},
-                        {true, true, true, true, true, true, true, true, true},
-                        {true, true, true, true, true, true, true, true, true}};
 
-        // Copy from hardcodedIsGiven into array "isGiven"
-        for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
-            for (int col = 0; col < SudokuConstants.GRID_SIZE; ++col) {
-                isGiven[row][col] = hardcodedIsGiven[row][col];
-            }
+        // Clear cells based on difficulty level
+        int clues;
+        switch (level) {
+            case EASY:
+                clues = 40; // Banyaknya angka yang diberikan
+                break;
+            case MEDIUM:
+                clues = 30;
+                break;
+            case HARD:
+                clues = 20;
+                break;
+            default:
+                clues = 30;
         }
+        clearCells(SudokuConstants.GRID_SIZE * SudokuConstants.GRID_SIZE - clues);
     }
-
-    //(For advanced students) use singleton design pattern for this class
 }
+    //(For advanced students) use singleton design pattern for this class
