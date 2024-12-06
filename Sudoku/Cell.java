@@ -53,7 +53,7 @@ public class Cell extends JTextField {
             super.setForeground(FG_GIVEN);
         } else if (status == CellStatus.TO_GUESS) {
             // Inherited from JTextField: Set display properties
-            super.setText("");
+            // super.setText("");
             super.setEditable(true);
             super.setBackground(BG_TO_GUESS);
             super.setForeground(FG_NOT_GIVEN);
