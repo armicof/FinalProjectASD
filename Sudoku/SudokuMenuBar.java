@@ -16,8 +16,8 @@ public class SudokuMenuBar extends JMenuBar {
         JMenuItem exitItem = new JMenuItem("Exit");
 
         // Add action listeners to the menu items
-        newGameItem.addActionListener(e -> sudokuApp.newGame(Puzzle.Difficulty.EASY));
-        resetGameItem.addActionListener(e -> sudokuApp.resetGame(Puzzle.Difficulty.EASY));
+        newGameItem.addActionListener(e -> sudokuApp.newGame(Puzzle.Difficulty.MEDIUM));
+        resetGameItem.addActionListener(e -> sudokuApp.resetGame());
         exitItem.addActionListener(e -> System.exit(0));
 
         // Add items to the "File" menu

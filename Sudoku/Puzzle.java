@@ -22,25 +22,22 @@ public class Puzzle {
      * Clear cells to create the puzzle by removing certain numbers.
      */
     private void clearCells(int cellsToClear) {
-        // Awalnya semua angka diberikan
         for (int i = 0; i < SudokuConstants.GRID_SIZE; i++) {
             for (int j = 0; j < SudokuConstants.GRID_SIZE; j++) {
-                isGiven[i][j] = true; 
+                isGiven[i][j] = true; // Awalnya semua angka diberikan
             }
         }
-    
-        // Hapus angka secara acak
+
+        // Randomly remove numbers
         for (int i = 0; i < cellsToClear; i++) {
             int row, col;
             do {
                 row = (int) (Math.random() * SudokuConstants.GRID_SIZE);
                 col = (int) (Math.random() * SudokuConstants.GRID_SIZE);
             } while (!isGiven[row][col]); // Cari cell yang belum kosong
-            isGiven[row][col] = false;    // Tandai angka dihapus
-            numbers[row][col] = 0;        // Hapus angka
-        }
+            isGiven[row][col] = false;   // Hapus angka
+        }      
     }
-    
 
     // Generate a new puzzle given the number of cells to be guessed, which can be used
     //  to control the difficulty level.
