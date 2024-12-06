@@ -16,8 +16,8 @@ public class GameBoardPanel extends JPanel {
     private Cell[][] cells = new Cell[SudokuConstants.GRID_SIZE][SudokuConstants.GRID_SIZE];
     /** It also contains a Puzzle with array numbers and isGiven */
     private Puzzle puzzle = new Puzzle();
-    private int remainingCells;
     private Sudoku parentFrame;
+    private int score = 0;
 
     /** Constructor */
     public GameBoardPanel(Sudoku parentFrame) {
@@ -62,6 +62,11 @@ public class GameBoardPanel extends JPanel {
                 cells[row][col].newGame(puzzle.numbers[row][col], puzzle.isGiven[row][col]);
             }
         }
+        // Notify the Sudoku frame to reset/start the timer
+        parentFrame.resetTimer();
+         // Reset score when starting a new game
+        score = 0;
+        parentFrame.updateScore(score); // Update the score display
     }
 
     /**
@@ -115,9 +120,11 @@ public class GameBoardPanel extends JPanel {
              */
             if (numberIn == sourceCell.number) {
                 sourceCell.status = CellStatus.CORRECT_GUESS;
+                score += 10; // Award points for correct guess
                 GameBoardPanel.this.getRemainingCells();
             } else {
                 sourceCell.status = CellStatus.WRONG_GUESS;
+                score -= 5; // Deduct points for incorrect guess
             }
             sourceCell.paint();   // re-paint this cell based on its status
 
@@ -127,10 +134,15 @@ public class GameBoardPanel extends JPanel {
              *   by calling isSolved(). Put up a congratulation JOptionPane, if so.
              */
 
+            // Update the score display
+            parentFrame.updateScore(score);
+             
             parentFrame.updateStatusBar();
             if(isSolved()){
+                parentFrame.stopTimer();
                 JOptionPane.showMessageDialog(null, "Congratulation!");
             }
+
 
         }
     }
