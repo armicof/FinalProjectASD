@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.ImageIcon;
 
 public class WelcomeScreen {
     private JFrame welcomeFrame;
@@ -19,19 +18,19 @@ public class WelcomeScreen {
         welcomeFrame = new JFrame("Welcome to Sudoku");
 
         // Create a JPanel with custom paint method to add a background image
-        JPanel panelWithImage = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                // Load the background image
-                ImageIcon imageIcon = new ImageIcon("bg copy.png");  // Change the path
-                Image image = imageIcon.getImage();
-                g.drawImage(image, 0, 0, this);  // Draw the image at coordinates (0, 0)
-            }
-        };
+        // JPanel gradientPanel = new JPanel() {
+        //     @Override
+        //     protected void paintComponent(Graphics g) {
+        //         super.paintComponent(g);
+        //         // Create a gradient from top to bottom
+        //         GradientPaint gradient = new GradientPaint(0, 0, Color.CYAN, 0, getHeight(), Color.MAGENTA);
+        //         ((Graphics2D) g).setPaint(gradient);
+        //         g.fillRect(0, 0, getWidth(), getHeight());
+        //     }
+        // };
 
         // Set the layout of the panel
-        panelWithImage.setLayout(new BorderLayout());
+        welcomeFrame.setLayout(new BorderLayout());
 
         // Set up a label with a welcome message
         JLabel welcomeLabel = new JLabel("Welcome to Sudoku!", JLabel.CENTER);
@@ -81,14 +80,15 @@ public class WelcomeScreen {
         buttonPanel.add(exitButton);
 
         // Add components to the background panel
-        panelWithImage.add(welcomeLabel, BorderLayout.CENTER);  // Add label to the center
-        panelWithImage.add(buttonPanel, BorderLayout.SOUTH);  // Add the panel with buttons to the bottom
+        welcomeFrame.add(welcomeLabel, BorderLayout.CENTER);  // Add label to the center
+        welcomeFrame.add(buttonPanel, BorderLayout.SOUTH);  // Add the panel with buttons to the bottom
 
         // Set the frame properties
         welcomeFrame.setSize(680, 700);
         welcomeFrame.setLocationRelativeTo(null);  // Center the frame on the screen
         welcomeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        welcomeFrame.setContentPane(panelWithImage);  // Set the custom background panel as the content pane
+        welcomeFrame.getContentPane().setBackground(new Color(48, 92, 222));  // Light gray
+;  // Set the custom background panel as the content pane
     }
 
     public void show() {
