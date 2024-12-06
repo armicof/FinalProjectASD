@@ -1,5 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
+
 /**
  * The main Sudoku program
  */
@@ -28,7 +29,7 @@ public class Sudoku extends JFrame {
         add(statusBar, BorderLayout.SOUTH);
 
         // Initialize the game board to start the game
-        board.newGame();
+        board.newGame(Puzzle.Difficulty.MEDIUM);
         updateStatusBar();
 
         pack();     // Pack the UI components, instead of using setSize()
@@ -40,13 +41,13 @@ public class Sudoku extends JFrame {
     }
 
     // Methods for menu actions
-    public void newGame() {
-        board.newGame();
+    public void newGame(Puzzle.Difficulty level) {
+        board.newGame(level);
         updateStatusBar();
     }
 
     public void resetGame() {
-        board.newGame(); // Reset logic can be more specific if needed
+        board.newGame(Puzzle.Difficulty.MEDIUM); // Reset logic can be more specific if needed
         updateStatusBar();
     }
 
@@ -55,7 +56,7 @@ public class Sudoku extends JFrame {
     }
 
     /** The entry main() entry method */
-    public void play() {
+    public static void play() {
         // [TODO 1] Check "Swing program template" on how to run
         //  the constructor of "SudokuMain"
         SwingUtilities.invokeLater(() -> new Sudoku());
