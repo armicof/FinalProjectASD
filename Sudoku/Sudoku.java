@@ -25,6 +25,8 @@ public class Sudoku extends JFrame {
         pack();     // Pack the UI components, instead of using setSize()
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // to handle window-closing
         setTitle("Sudoku");
+        setSize(600, 700);
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
