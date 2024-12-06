@@ -20,7 +20,7 @@ public class Sudoku extends JFrame {
         setJMenuBar(menuBar);
 
         // Initialize the game board to start the game
-        board.newGame();
+        board.newGame(Puzzle.Difficulty.EASY);
 
         pack();     // Pack the UI components, instead of using setSize()
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // to handle window-closing
@@ -29,12 +29,12 @@ public class Sudoku extends JFrame {
     }
 
     // Methods for menu actions
-    public void newGame() {
-        board.newGame();
+    public void newGame(Puzzle.Difficulty level) {
+        board.newGame(level);
     }
 
-    public void resetGame() {
-        board.newGame(); // Reset logic can be more specific if needed
+    public void resetGame(Puzzle.Difficulty level) {
+        board.newGame(level); // Reset logic can be more specific if needed
     }
 
 

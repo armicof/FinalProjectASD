@@ -16,8 +16,8 @@ public class SudokuMenuBar extends JMenuBar {
         JMenuItem exitItem = new JMenuItem("Exit");
 
         // Add action listeners to the menu items
-        newGameItem.addActionListener(e -> sudokuApp.newGame());
-        resetGameItem.addActionListener(e -> sudokuApp.resetGame());
+        newGameItem.addActionListener(e -> sudokuApp.newGame(Puzzle.Difficulty.EASY));
+        resetGameItem.addActionListener(e -> sudokuApp.resetGame(Puzzle.Difficulty.EASY));
         exitItem.addActionListener(e -> System.exit(0));
 
         // Add items to the "File" menu
@@ -38,10 +38,26 @@ public class SudokuMenuBar extends JMenuBar {
         aboutItem.addActionListener(e -> showAboutDialog());
         helpMenu.add(aboutItem);
 
+        // Create the "Difficulty" menu
+        JMenu gameMenu = new JMenu("Difficulty");
+
+        JMenuItem easyMenuItem = new JMenuItem("Easy");
+        easyMenuItem.addActionListener(e -> sudokuApp.newGame(Puzzle.Difficulty.EASY));
+        gameMenu.add(easyMenuItem);
+
+        JMenuItem mediumMenuItem = new JMenuItem("Medium");
+        mediumMenuItem.addActionListener(e -> sudokuApp.newGame(Puzzle.Difficulty.MEDIUM));
+        gameMenu.add(mediumMenuItem);
+
+        JMenuItem hardMenuItem = new JMenuItem("Hard");
+        hardMenuItem.addActionListener(e -> sudokuApp.newGame(Puzzle.Difficulty.HARD));
+        gameMenu.add(hardMenuItem);
+
         // Add menus to the menu bar
         add(fileMenu);
         add(optionsMenu);
         add(helpMenu);
+        add(gameMenu);
     }
 
     // Show settings dialog (example implementation)
