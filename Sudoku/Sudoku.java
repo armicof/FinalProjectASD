@@ -15,6 +15,8 @@ public class Sudoku extends JFrame {
     private int secondsElapsed; // Counter for elapsed seconds
     private Timer timer; // Timer to update every second
     private JLabel scoreLabel;
+    private JLabel playerNameLabel; 
+    private JTextField playerNameField;
 
     // Constructor
     public Sudoku() {
@@ -35,25 +37,58 @@ public class Sudoku extends JFrame {
 
         // Inisialisasi JPanel untuk menampung timer dan scoreLabel
         JPanel topPanel = new JPanel();
-        topPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Menggunakan FlowLayout untuk mengatur tata letak secara horizontal
+        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); // Menggunakan FlowLayout untuk mengatur tata letak secara horizontal
         // Tambahkan topPanel ke BorderLayout.NORTH
         this.add(topPanel, BorderLayout.NORTH);
 
-        // In your Sudoku frame constructor:
-        scoreLabel = new JLabel("Score: 0");
-        scoreLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-        scoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        scoreLabel.setPreferredSize(new Dimension(200, 30));
-        // statusBar.add(scoreLabel); // Assuming you have a statusBar panel
-        // add(scoreLabel, BorderLayout.SOUTH);
-        topPanel.add(scoreLabel);
+        // Label to display player's name
+        playerNameLabel = new JLabel("Enter Name");
+        playerNameLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        playerNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        playerNameLabel.setPreferredSize(new Dimension(100, 30));
+        topPanel.add(playerNameLabel);
+
+        // Player name input field
+        playerNameField = new JTextField(18);
+        playerNameField.setFont(new Font("Arial", Font.PLAIN, 16));
+        playerNameField.setToolTipText("Enter your name and press Enter");
+        playerNameField.addActionListener(e -> {
+            String playerName = playerNameField.getText().trim();
+            if (!playerName.isEmpty()) {
+                playerNameLabel.setText("Player: " + playerName);
+    
+                // Remove the text field
+                topPanel.remove(playerNameField);
+
+                playerNameLabel.setPreferredSize(null); 
+    
+                // Refresh the panel to update the UI
+                topPanel.revalidate();
+                topPanel.repaint();
+
+                // Initialize the game board to start the game
+                board.newGame(Puzzle.Difficulty.EASY);
+                updateStatusBar();
+            } else {
+                playerNameLabel.setText("Enter your name");
+                JOptionPane.showMessageDialog(this, "Please enter your name to start the game!", "Name Required", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        topPanel.add(playerNameField);
 
         // Initialize the timer label
         timerLabel = new JLabel("Time: 00:00");
         timerLabel.setFont(new Font("Poppins", Font.BOLD, 20));
         timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        // add(timerLabel, BorderLayout.NORTH);
+        timerLabel.setPreferredSize(new Dimension(375, 30));
         topPanel.add(timerLabel);
+
+        // In your Sudoku frame constructor:
+        scoreLabel = new JLabel("Score: 0");
+        scoreLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        scoreLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        scoreLabel.setPreferredSize(new Dimension(100, 30));
+        topPanel.add(scoreLabel);
 
         // Timer to update the time every second
         timer = new Timer(1000, new ActionListener() {
@@ -63,10 +98,6 @@ public class Sudoku extends JFrame {
                 updateTimerLabel();
             }
         });
-
-        // Initialize the game board to start the game
-        board.newGame(Puzzle.Difficulty.MEDIUM);
-        updateStatusBar();
 
         pack();     // Pack the UI components, instead of using setSize()
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // to handle window-closing
