@@ -23,10 +23,10 @@ public class GameMain extends JPanel {
    private State currentState;  // the current state of the game
    private Seed currentPlayer;  // the current player
    private JLabel statusBar;    // for displaying status message
+   private AIPlayer aiPlayer;   // AI player
 
    /** Constructor to setup the UI and game components */
    public GameMain() {
-
       // This JPanel fires MouseEvent
       super.addMouseListener(new MouseAdapter() {
          @Override
@@ -38,18 +38,18 @@ public class GameMain extends JPanel {
             int col = mouseX / Cell.SIZE;
 
             if (currentState == State.PLAYING) {
-               if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS
+               if (currentPlayer == Seed.CROSS) {
+                  if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS
                      && board.cells[row][col].content == Seed.NO_SEED) {
-                  // Update cells[][] and return the new game state after the move
-                  currentState = board.stepGame(currentPlayer, row, col);
-                  // Play appropriate sound clip
-                  if (currentState == State.PLAYING) {
-                     SoundEffect.EAT_FOOD.play();
-                  } else {
-                     SoundEffect.DIE.play();
+                     // Update cells[][] and return the new game state after the move
+                     currentState = board.stepGame(currentPlayer, row, col);
+                     // Switch player
+                     currentPlayer = Seed.NOUGHT;
+                     // AI move
+                     if (currentState == State.PLAYING) {
+                        aiMove();
+                     }
                   }
-                  // Switch player
-                  currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
                }
             } else {        // game over
                newGame();  // restart the game
@@ -82,6 +82,7 @@ public class GameMain extends JPanel {
    /** Initialize the game (run once) */
    public void initGame() {
       board = new Board();  // allocate the game-board
+      aiPlayer = new AIPlayerTableLookup(board);  // allocate the AI player
    }
 
    /** Reset the game-board contents and the current-state, ready for new game */
@@ -93,6 +94,16 @@ public class GameMain extends JPanel {
       }
       currentPlayer = Seed.CROSS;    // cross plays first
       currentState = State.PLAYING;  // ready to play
+      aiPlayer.setSeed(Seed.NOUGHT); // computer plays nought
+   }
+
+   /** AI move logic */
+   private void aiMove() {
+      int[] move = aiPlayer.move();
+      if (move != null) {
+         currentState = board.stepGame(currentPlayer, move[0], move[1]);
+         currentPlayer = Seed.CROSS; // Switch back to player
+      }
    }
 
    /** Custom painting codes on this JPanel */
