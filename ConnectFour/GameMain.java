@@ -16,14 +16,78 @@ public class GameMain extends JPanel {
     public static final Color COLOR_NOUGHT = new Color(64, 154, 225); // Blue #409AE1
     public static final Font FONT_STATUS = new Font("OCR A Extended", Font.PLAIN, 14);
 
+    // Timer constants
+    private static final int TIMER_DELAY = 1000; // 1 second
+    private static final int INITIAL_TIME = 60; // 1 minutes (60 seconds) per player
+
     // Define game objects
     private Board board;         // the game board
     private State currentState;  // the current state of the game
     private Seed currentPlayer;  // the current player
     private JLabel statusBar;    // for displaying status message
 
+    // Timer components
+    private Timer gameTimer;
+    private int playerXTime;
+    private int playerOTime;
+    private JLabel timerLabel;
+
     /** Constructor to setup the UI and game components */
     public GameMain() {
+        // Initialize timer
+        playerXTime = INITIAL_TIME;
+        playerOTime = INITIAL_TIME;
+        
+        // Create timer label
+        timerLabel = new JLabel();
+        timerLabel.setFont(FONT_STATUS);
+        timerLabel.setBackground(COLOR_BG_STATUS);
+        timerLabel.setOpaque(true);
+        timerLabel.setPreferredSize(new Dimension(300, 20));
+        timerLabel.setHorizontalAlignment(JLabel.CENTER);
+        timerLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 12));
+
+        // Setup the status bar (JLabel) to display status message
+        statusBar = new JLabel();
+        statusBar.setFont(FONT_STATUS);
+        statusBar.setBackground(COLOR_BG_STATUS);
+        statusBar.setOpaque(true);
+        statusBar.setPreferredSize(new Dimension(300, 20));
+        statusBar.setHorizontalAlignment(JLabel.LEFT);
+        statusBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 12));
+
+        super.setLayout(new BorderLayout());
+        super.setPreferredSize(new Dimension(Board.CANVAS_WIDTH, Board.CANVAS_HEIGHT));
+        super.add(statusBar, BorderLayout.PAGE_END); // same as SOUTH
+        super.add(timerLabel, BorderLayout.PAGE_START);
+        // account for statusBar in height
+        super.setBorder(BorderFactory.createLineBorder(COLOR_BG_STATUS, 2, false));
+        
+        // Create game timer
+        gameTimer = new Timer(TIMER_DELAY, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (currentState == State.PLAYING) {
+                    if (currentPlayer == Seed.CROSS) {
+                        playerXTime--;
+                        if (playerXTime <= 0) {
+                            playerXTime = 0; // Ensure we don't go negative
+                            currentState = State.NOUGHT_WON;
+                            gameTimer.stop();
+                        }
+                    } else {
+                        playerOTime--;
+                        if (playerOTime <= 0) {
+                            playerOTime = 0; // Ensure we don't go negative
+                            currentState = State.CROSS_WON;
+                            gameTimer.stop();
+                        }
+                    }
+                    updateTimerLabel();
+                    repaint();
+                }
+            }
+        });
 
         // This JPanel fires MouseEvent
         super.addMouseListener(new MouseAdapter() {
@@ -56,24 +120,16 @@ public class GameMain extends JPanel {
             }
         });
 
-        // Setup the status bar (JLabel) to display status message
-        statusBar = new JLabel();
-        statusBar.setFont(FONT_STATUS);
-        statusBar.setBackground(COLOR_BG_STATUS);
-        statusBar.setOpaque(true);
-        statusBar.setPreferredSize(new Dimension(300, 30));
-        statusBar.setHorizontalAlignment(JLabel.LEFT);
-        statusBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 12));
-
-        super.setLayout(new BorderLayout());
-        super.add(statusBar, BorderLayout.PAGE_END); // same as SOUTH
-        super.setPreferredSize(new Dimension(Board.CANVAS_WIDTH, Board.CANVAS_HEIGHT + 30));
-        // account for statusBar in height
-        super.setBorder(BorderFactory.createLineBorder(COLOR_BG_STATUS, 2, false));
-
         // Set up Game
         initGame();
         newGame();
+    }
+
+    private void updateTimerLabel() {
+        // Convert seconds to minutes:seconds format
+        String xTime = String.format("%d:%02d", playerXTime / 60, playerXTime % 60);
+        String oTime = String.format("%d:%02d", playerOTime / 60, playerOTime % 60);
+        timerLabel.setText(String.format("X: %s | O: %s", xTime, oTime));
     }
 
     /** Initialize the game (run once) */
@@ -90,6 +146,14 @@ public class GameMain extends JPanel {
         }
         currentPlayer = Seed.CROSS;    // cross plays first
         currentState = State.PLAYING;  // ready to play
+
+        // Reset timers to initial time
+        playerXTime = INITIAL_TIME;
+        playerOTime = INITIAL_TIME;
+        updateTimerLabel();
+        
+        // Start timer
+        gameTimer.start();
     }
 
     /** Custom painting codes on this JPanel */
