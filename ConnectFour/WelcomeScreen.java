@@ -1,9 +1,15 @@
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
 
 public class WelcomeScreen extends JFrame {
     public WelcomeScreen() {
+        // Set cross-platform look and feel
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
         // Frame settings
         setTitle("Welcome to Connect Four");
         setSize(400, 300);
@@ -17,15 +23,21 @@ public class WelcomeScreen extends JFrame {
 
         JButton startButton = new JButton("Start Game");
         startButton.setFont(new Font("Poppins", Font.PLAIN, 18));
-        startButton.setBackground(Color.BLUE);
-        startButton.setForeground(Color.WHITE);
-        startButton.setFocusPainted(false);
+        startButton.setBackground(new Color(239, 105, 80));  // Red background
+        startButton.setForeground(Color.WHITE);  // White text
+        startButton.setFocusPainted(false);  // Remove the focus paint
+        startButton.setOpaque(true);  // Ensure the background color is visible
+        startButton.setBorderPainted(false);  // Remove the border
+        startButton.setPreferredSize(new Dimension(150, 50));  // Set a fixed size
 
         JButton quitButton = new JButton("Quit");
         quitButton.setFont(new Font("Poppins", Font.PLAIN, 18));
-        quitButton.setBackground(Color.DARK_GRAY);
-        quitButton.setForeground(Color.WHITE);
-        quitButton.setFocusPainted(false);
+        quitButton.setBackground(new Color(255, 221, 51));  // Yellow background
+        quitButton.setForeground(Color.WHITE);  // White text
+        quitButton.setFocusPainted(false);  // Remove the focus paint
+        quitButton.setOpaque(true);  // Ensure the background color is visible
+        quitButton.setBorderPainted(false);  // Remove the border
+        quitButton.setPreferredSize(new Dimension(150, 50));  // Set a fixed size
 
         // Layout setup
         setLayout(new BorderLayout());
@@ -33,6 +45,7 @@ public class WelcomeScreen extends JFrame {
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        buttonPanel.setBackground(new Color(255, 255, 255));  // Set a contrasting background for the panel
         buttonPanel.add(startButton);
         buttonPanel.add(quitButton);
         add(buttonPanel, BorderLayout.SOUTH);
@@ -51,14 +64,6 @@ public class WelcomeScreen extends JFrame {
 
         // Make the frame visible
         setVisible(true);
+        validate();  // Force layout and repaint
     }
-
-    // public static void main(String[] args) {
-    //     SwingUtilities.invokeLater(new Runnable() {
-    //         @Override
-    //         public void run() {
-    //             new WelcomeScreen().setVisible(true);
-    //         }
-    //     });
-    // }
 }

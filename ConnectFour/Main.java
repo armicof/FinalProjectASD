@@ -4,19 +4,20 @@
 import javax.swing.SwingUtilities;
 
 public class Main {
-    // public static void main(String[] args) {
-    //     // GameMain connectFour = new GameMain();
-    //     // connectFour.play();
+    public static void main(String[] args) {
+       // GameMain connectFour = new GameMain();
+       // connectFour.play();
     //     javax.swing.SwingUtilities.invokeLater(() -> {
     //         new WelcomeScreen(); // Launch the welcome screen
     //     });
     // }
-    public static void main(String[] args) {
+    // public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 new WelcomeScreen().setVisible(true);
             }
         });
+
     }
 }
