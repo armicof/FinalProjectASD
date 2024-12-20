@@ -24,9 +24,12 @@ public class GameMain extends JPanel {
    private Seed currentPlayer;  // the current player
    private JLabel statusBar;    // for displaying status message
    private AIPlayer aiPlayer;   // AI player
+   private boolean vsAI;        // Flag for playing against AI or Human
 
    /** Constructor to setup the UI and game components */
-   public GameMain() {
+    public GameMain(boolean vsAI) {
+      this.vsAI = vsAI;
+
       // This JPanel fires MouseEvent
       super.addMouseListener(new MouseAdapter() {
          @Override
@@ -38,15 +41,15 @@ public class GameMain extends JPanel {
             int col = mouseX / Cell.SIZE;
 
             if (currentState == State.PLAYING) {
-               if (currentPlayer == Seed.CROSS) {
+               if (currentPlayer == Seed.CROSS || (!vsAI && currentPlayer == Seed.NOUGHT)) {
                   if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS
                      && board.cells[row][col].content == Seed.NO_SEED) {
                      // Update cells[][] and return the new game state after the move
                      currentState = board.stepGame(currentPlayer, row, col);
                      // Switch player
-                     currentPlayer = Seed.NOUGHT;
-                     // AI move
-                     if (currentState == State.PLAYING) {
+                     currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
+                     // AI move if playing against AI and it is AI's turn
+                     if (vsAI && currentState == State.PLAYING && currentPlayer == Seed.NOUGHT) {
                         aiMove();
                      }
                   }
@@ -95,6 +98,10 @@ public class GameMain extends JPanel {
       currentPlayer = Seed.CROSS;    // cross plays first
       currentState = State.PLAYING;  // ready to play
       aiPlayer.setSeed(Seed.NOUGHT); // computer plays nought
+      
+      if (vsAI) {
+         aiPlayer.setSeed(Seed.NOUGHT); // computer plays nought
+      }
    }
 
    /** AI move logic */
@@ -132,12 +139,19 @@ public class GameMain extends JPanel {
 
    /** The entry "main" method */
    public static void main(String[] args) {
+      Object[] options = {"Vs AI", "Vs Human"};
+      int choice = JOptionPane.showOptionDialog(null, "Choose Game Mode:", TITLE,
+            JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+            null, options, options[0]);
+
+      boolean vsAI = (choice == 0); // true if "Vs AI" is chosen
+
       // Run GUI construction codes in Event-Dispatching thread for thread safety
       javax.swing.SwingUtilities.invokeLater(new Runnable() {
          public void run() {
             JFrame frame = new JFrame(TITLE);
             // Set the content-pane of the JFrame to an instance of main JPanel
-            frame.setContentPane(new GameMain());
+            frame.setContentPane(new GameMain(vsAI));
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
             frame.setLocationRelativeTo(null); // center the application window
