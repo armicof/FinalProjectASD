@@ -24,7 +24,7 @@ public class GameMain extends JPanel {
 
     /** Constructor to setup the UI and game components */
     public GameMain() {
-
+        SoundEffect.initGame();
         // This JPanel fires MouseEvent
         super.addMouseListener(new MouseAdapter() {
             @Override
@@ -41,6 +41,17 @@ public class GameMain extends JPanel {
                             if (board.cells[row][colSelected].content == Seed.NO_SEED) {
                                 // Make a move
                                 currentState = board.stepGame(currentPlayer, row, colSelected);
+                                if (currentState == State.PLAYING) {
+                                    if (currentPlayer == Seed.CROSS){
+                                        SoundEffect.EAT_FOOD.play();
+                                    } else if (currentPlayer == Seed.NOUGHT) {
+                                        SoundEffect.EXPLODE.play();
+                                    } else {
+                                        SoundEffect.DIE.play();
+                                    }
+                                } else {
+                                    SoundEffect.DIE.play();
+                                }
                                 // Switch player
                                 currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
                                 break;
@@ -90,6 +101,8 @@ public class GameMain extends JPanel {
         }
         currentPlayer = Seed.CROSS;    // cross plays first
         currentState = State.PLAYING;  // ready to play
+
+        
     }
 
     /** Custom painting codes on this JPanel */

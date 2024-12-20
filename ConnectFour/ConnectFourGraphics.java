@@ -26,7 +26,7 @@ public class ConnectFourGraphics extends JFrame {
     public static final Color COLOR_GRID   = Color.LIGHT_GRAY;  // grid lines
     public static final Color COLOR_CROSS  = new Color(211, 45, 65);  // Red #D32D41
     public static final Color COLOR_NOUGHT = new Color(76, 181, 245); // Blue #4CB5F5
-    public static final Font FONT_STATUS = new Font("OCR A Extended", Font.PLAIN, 14);
+    public static final Font FONT_STATUS = new Font("Poppins", Font.PLAIN, 14);
 
     // This enum (inner class) contains the various states of the game
     public enum State {
@@ -71,6 +71,17 @@ public class ConnectFourGraphics extends JFrame {
                             && col < COLS && board[row][col] == Seed.NO_SEED) {
                         // Update board[][] and return the new game state after the move
                         currentState = stepGame(currentPlayer, row, col);
+                        if (currentState == State.PLAYING) {
+                                if (currentPlayer == Seed.CROSS){
+                                    SoundEffect.EAT_FOOD.play();
+                                } else if (currentPlayer == Seed.NOUGHT) {
+                                    SoundEffect.EXPLODE.play();
+                                } else {
+                                    SoundEffect.DIE.play();
+                                }
+                            } else {
+                                SoundEffect.DIE.play();
+                            }
                         // Switch player
                         currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
                     }
