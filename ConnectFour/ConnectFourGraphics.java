@@ -4,12 +4,12 @@ import javax.swing.*;
 /**
  * Tic-Tac-Toe: Two-player Graphics version with Simple-OO in one class
  */
-public class TTTGraphics extends JFrame {
+public class ConnectFourGraphics extends JFrame {
     private static final long serialVersionUID = 1L; // to prevent serializable warning
 
     // Define named constants for the game board
-    public static final int ROWS = 3;  // ROWS x COLS cells
-    public static final int COLS = 3;
+    public static final int ROWS = 6;  // ROWS x COLS cells
+    public static final int COLS = 7;
 
     // Define named constants for the drawing graphics
     public static final int CELL_SIZE = 120; // cell width/height (square)
@@ -48,7 +48,7 @@ public class TTTGraphics extends JFrame {
     private JLabel statusBar;  // Status Bar
 
     /** Constructor to setup the game and the GUI components */
-    public TTTGraphics() {
+    public ConnectFourGraphics() {
         // Initialize the game objects
         initGame();
 
@@ -97,7 +97,7 @@ public class TTTGraphics extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();  // pack all the components in this JFrame
-        setTitle("Tic Tac Toe");
+        setTitle("Connect Four");
         setVisible(true);  // show this JFrame
 
         newGame();
@@ -224,7 +224,7 @@ public class TTTGraphics extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new TTTGraphics(); // Let the constructor do the job
+                new ConnectFourGraphics(); // Let the constructor do the job
             }
         });
     }

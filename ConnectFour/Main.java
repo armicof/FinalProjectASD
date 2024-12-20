@@ -2,7 +2,7 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        GameMain game = new GameMain();
-        game.play();
+        GameMain connectFour = new GameMain();
+        connectFour.play();
     }
 }
