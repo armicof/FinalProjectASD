@@ -34,6 +34,8 @@ public class GameMain extends JPanel {
 
     /** Constructor to setup the UI and game components */
     public GameMain() {
+        SoundEffect.initGame();
+        
         // Initialize timer
         playerXTime = INITIAL_TIME;
         playerOTime = INITIAL_TIME;
@@ -113,7 +115,8 @@ public class GameMain extends JPanel {
                                     } else {
                                         SoundEffect.DIE.play();
                                     }
-                                } else {
+                                } 
+                                else {
                                     SoundEffect.DIE.play();
                                 }
                                 // Switch player

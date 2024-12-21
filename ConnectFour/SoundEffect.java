@@ -18,9 +18,9 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * For Eclipse, place the audio file under "src", which will be copied into "bin".
  */
 public enum SoundEffect {
-   EAT_FOOD("whistle.wav"),
-   EXPLODE("pop.wav"),
-   DIE("bells.wav");
+   EAT_FOOD("/sounds/whistle.wav"),
+   EXPLODE("/sounds/pop.wav"),
+   DIE("/sounds/bells.wav");
 
    /** Nested enumeration for specifying volume */
    public static enum Volume {
@@ -31,34 +31,49 @@ public enum SoundEffect {
 
    /** Each sound effect has its own clip, loaded with its own sound file. */
    private Clip clip;
+   private boolean isValid = false;
 
    /** Private Constructor to construct each element of the enum with its own sound file. */
    private SoundEffect(String soundFileName) {
       try {
          // Use URL (instead of File) to read from disk and JAR.
          URL url = this.getClass().getClassLoader().getResource(soundFileName);
+         if (url == null) {
+            System.err.println("Warning: Sound file not found: " + soundFileName);
+            return;
+        }
          // Set up an audio input stream piped from the sound file.
          AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
          // Get a clip resource.
          clip = AudioSystem.getClip();
          // Open audio clip and load samples from the audio input stream.
          clip.open(audioInputStream);
+         isValid = true;
       } catch (UnsupportedAudioFileException e) {
-         e.printStackTrace();
-      } catch (IOException e) {
-         e.printStackTrace();
-      } catch (LineUnavailableException e) {
-         e.printStackTrace();
-      }
+         System.err.println("Error: Unsupported audio file format: " + soundFileName);
+     } catch (IOException e) {
+         System.err.println("Error: Could not read sound file: " + soundFileName);
+     } catch (LineUnavailableException e) {
+         System.err.println("Error: Audio line unavailable");
+     } catch (Exception e) {
+         System.err.println("Error: Could not load sound: " + e.getMessage());
+     }
    }
 
    /** Play or Re-play the sound effect from the beginning, by rewinding. */
    public void play() {
-      if (volume != Volume.MUTE) {
-         if (clip.isRunning())
-            clip.stop();   // Stop the player if it is still running
-         clip.setFramePosition(0); // rewind to the beginning
-         clip.start();     // Start playing
+      if (!isValid || volume == Volume.MUTE) {
+         return;
+      }
+      
+      try {
+         if (clip.isRunning()) {
+            clip.stop();
+         }
+         clip.setFramePosition(0);
+         clip.start();
+      } catch (Exception e) {
+            System.err.println("Error playing sound: " + e.getMessage());
       }
    }
 
