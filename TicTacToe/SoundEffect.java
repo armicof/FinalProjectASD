@@ -22,7 +22,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public enum SoundEffect {
    EAT_FOOD("TicTacToe/Write.wav"),
    DIE("TicTacToe/Win.wav");
-
    /** Nested enumeration for specifying volume */
    public static enum Volume {
       MUTE, LOW, MEDIUM, HIGH
